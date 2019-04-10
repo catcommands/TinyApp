@@ -31,6 +31,11 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
+app.get("/urls/:shortURL", (req, res) => {
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]/* What goes here? */ };
+  res.render("urls_shows", templateVars);
+});
+
 // result in browser: Hello!
 
 // After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
