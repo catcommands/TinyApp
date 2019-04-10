@@ -9,10 +9,8 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-    <!-- Add EJS code here -->
-<p> Kobi is teaching jeff today</p>
-
-<p> <%= shortURL%></p>
-<p> <%= longURL%> </p>
+  <% include partials/_header.ejs %>
+    <h1>Urls Show</h1>
+  <%= shortURL %>: <%= longURL %>
 </body>
 </html>

@@ -7,13 +7,26 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
+  
 </head>
 <body style="font-size:20px; padding:50px;">
-    <!-- Add EJS code here -->
-<p> Kobi is teaching jeff today</p>
-
-<% for (var url in urls){%>
-    <p><%=url%> :<%= urls[url] %></p>
-<%}%>
+  <% include partials/_header.ejs %>
+  <!-- delete and POST method in form -->
+    <h1>My URLs</h1>
+    <li><a href="">Create New TinyURL</a></li>
+  <ul>
+    <% for (var shortURL in urls) { %>
+    <li> <%= shortURL %> : <%= urls[shortURL] %><form method="POST" action="/urls/<%= shortURL %>/delete"><input type="submit">Delete</input></form>
+</li>
+    <% }; %>
+  </ul>
+<!-- Add EJS code here -->
 </body>
 </html>
+
+<!-- so here, I made sure certain tasks were achieved:
+
+// A list or table of the URLs and their shortened forms. 
+If you need a reminder on how to loop through data with EJS, take another peek at the What is a Template Engine? Reading.
+A link for shortening a new URL. This will be a dead link for now (href='#') as we will build the page for this functionality later.
+Note: As we add EJS and HTML to our template, refresh the URLs page in the browser (http://localhost:8080/urls) to see the results. -->
