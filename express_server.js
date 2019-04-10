@@ -21,6 +21,11 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 
+app.get("/urls", (req, res) => {
+  let templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars);
+});
+
 // result in browser: Hello!
 
 // After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
