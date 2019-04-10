@@ -10,5 +10,10 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
+<p> Kobi is teaching jeff today</p>
+
+<% for (var url in urls){%>
+    <p><%=url%> :<%= urls[url] %></p>
+<%}%>
 </body>
 </html>
