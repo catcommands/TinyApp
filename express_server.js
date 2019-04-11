@@ -75,6 +75,13 @@ function generateRandomString() {
   var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   for (var i = 0; i < length; i++)
     url += chars.charAt(Math.floor(Math.random() * chars.length));
-
   return url;
 }
+
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  res.cookie('username', req.body.username);
+  res.redirect('/urls');
+});
+
+
