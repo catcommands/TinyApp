@@ -56,26 +56,17 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  //if (req.session.username) {
+  console.log(req.body);
     var shortURL = generateRandomString();
     var longURL = req.body.longURL;
     urlDatabase[shortURL]=longURL;
     res.redirect('/urls');
-  //} else {
-    //res.redirect('/login?alert=true');
-  // make a new key-value pair in the urlDatabase
-  // the key is a random string, the value is the longURL from the request body
-  //res.send("Ok");         // Respond with 'Ok' (we will replace this)
-  //}  
 });
 
 app.post('/urls/:id', function (req, res) {
-  //let templateVars = req.params.shortURL
   urlDatabase[req.params.id] = req.body.longURL;
   res.redirect('/urls');
   console.log(urlDatabase);
-  //res.send('POST request to the homepage')
 });
 
 function generateRandomString() {
@@ -87,7 +78,3 @@ function generateRandomString() {
 
   return url;
 }
-
-// result in browser: Hello!
-
-// After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
