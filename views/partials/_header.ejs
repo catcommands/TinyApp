@@ -1,4 +1,16 @@
 <header>
-    <h1>TinyApp</h1>
+<h1>TinyApp</h1>
+        <% if(username){ %>
+<h1><%= username %></h1>
+    <form method="POST" action="/logout">
+        <input type="submit" value="Logout"/>
+    </form>
+    <% } else { %>  
+<h2>Register here</h2>
+   <form method="POST" action="/login">
+    <input name="username" />
+    <input type="submit" value="Login"/>
+    </form>
+<% } %>
 </header>
 <!-- added this file(path) in urls_index and shows.ejs -->
