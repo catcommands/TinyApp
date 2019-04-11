@@ -36,6 +36,12 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.post('/urls/:shortURL/delete', function (req, res) {
+  //let templateVars = req.params.shortURL
+  delete urlDatabase[req.params.shortURL];
+  res.redirect('/urls');
+  //res.send('POST request to the homepage')
+});
 // result in browser: Hello!
 
 // After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
