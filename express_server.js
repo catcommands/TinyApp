@@ -50,6 +50,26 @@ app.post('/urls/:shortURL/delete', function (req, res) {
   //res.send('POST request to the homepage')
 });
 
+app.post("/urls", (req, res) => {
+  console.log(req.body);  // Log the POST request body to the console
+
+  // make a new key-value pair in the urlDatabase
+  // the key is a random string, the value is the longURL from the request body
+  
+
+  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+});
+
+function generateRandomString() {
+  var url = "";
+  const length = 6;
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < length; i++)
+    url += chars.charAt(Math.floor(Math.random() * chars.length));
+
+  return url;
+}
+
 // result in browser: Hello!
 
 // After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
