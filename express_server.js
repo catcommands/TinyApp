@@ -50,14 +50,24 @@ app.post('/urls/:shortURL/delete', function (req, res) {
   //res.send('POST request to the homepage')
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
+
 app.post("/urls", (req, res) => {
   console.log(req.body);  // Log the POST request body to the console
-
+  //if (req.session.username) {
+    var shortURL = generateRandomString();
+    var longURL = req.body.longURL;
+    urlDatabase[shortURL]=longURL;
+    res.redirect('/urls');
+  //} else {
+    //res.redirect('/login?alert=true');
   // make a new key-value pair in the urlDatabase
   // the key is a random string, the value is the longURL from the request body
-  
-
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  //res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  //}  
 });
 
 function generateRandomString() {
