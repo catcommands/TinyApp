@@ -14,7 +14,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`I am listening now! Go Ahead! ${PORT}!`);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -31,6 +31,10 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
+
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars);
@@ -42,6 +46,7 @@ app.post('/urls/:shortURL/delete', function (req, res) {
   res.redirect('/urls');
   //res.send('POST request to the homepage')
 });
+
 // result in browser: Hello!
 
 // After adding app.get, result: {"b2xVn2":"http://www.lighthouselabs.ca","9sm5xK":"http://www.google.com"}
