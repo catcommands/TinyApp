@@ -51,7 +51,7 @@ app.post('/urls/:shortURL/delete', function (req, res) {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL]
   res.redirect(longURL);
 });
 
@@ -68,6 +68,14 @@ app.post("/urls", (req, res) => {
   // the key is a random string, the value is the longURL from the request body
   //res.send("Ok");         // Respond with 'Ok' (we will replace this)
   //}  
+});
+
+app.post('/urls/:id', function (req, res) {
+  //let templateVars = req.params.shortURL
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect('/urls');
+  console.log(urlDatabase);
+  //res.send('POST request to the homepage')
 });
 
 function generateRandomString() {
