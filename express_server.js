@@ -14,7 +14,7 @@ app.set("view engine", "ejs");
 const users = { 
   "userRandomID": {
     id: "userRandomID", 
-    email: "user@example.com", 
+    email: "jeff@canada.com", 
     password: "purple-monkey-dinosaur"
   },
  "user2RandomID": {
@@ -30,15 +30,21 @@ const urlDatabase = {
 };
 var findEmail = function(email) { 
   for (let user in users) {
-    if (email === user.email) {
-      return user;
+    if (email === users[user].email) {
+      return users[user]
     // } else {
     //   return false;  
     }
   } return false;
 }
 
-
+var findUser = function(user_id) { 
+  for (let user in users) {
+    if (user_id === user) {
+      return users[user];  
+    }
+  } return false;
+}
 
 app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
@@ -53,7 +59,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, "username":req.cookies.username};
+  let templateVars = { urls: urlDatabase, "user":findUser(req.cookies.user_id)};
   res.render("urls_index", templateVars);
 });
 
@@ -63,13 +69,13 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { urls: urlDatabase, "username":req.cookies.username};
+  let templateVars = { urls: urlDatabase, "user":req.cookies.user_id};
 
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], "username":req.cookies.username };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], "user":req.cookies.user_id };
   res.render("urls_show", templateVars);
 });
 
@@ -108,25 +114,27 @@ function generateRandomString() {
 
 app.post("/login", (req, res) => {
   console.log(req.body);
-  res.cookie('username', req.body.username);
+  var foundUser = findEmail(req.body.username)
+  if (foundUser) {
+    console.log(foundUser)
+    res.cookie('user_id', foundUser.id);
+  }
   res.redirect('/urls');
 });
 
 app.post("/edit", (req, res) => {
   console.log(req.body);
-  res.cookie('username', req.body.username);
+  res.cookie('user_id', req.body.user_id);
   res.redirect('');
 });
 
-// created a GET /register endpoint
+// create a GET /register endpoint
 app.get("/register", (req, res) => {
-  // let templateVars =  {username: req.cookie.user_id};
-  // res.render("register", templateVars);
   res.render("register");
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect('/urls');
 });
 
@@ -147,7 +155,5 @@ app.post("/register", (req, res) => {
 });
 //Create a Login Page: Get /login endpoint
 app.get("/login", (req, res) => {
-  //let templateVars =  {username: req.cookies.user_id};
-  // res.render("register", templateVars);
   res.render("login");
 });
