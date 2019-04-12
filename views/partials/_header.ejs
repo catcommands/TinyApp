@@ -14,3 +14,17 @@
 <% } %>
 </header>
 <!-- added this file(path) in urls_index and shows.ejs -->
+
+<!DOCTYPE html>
+<!-- views/partials/header.ejs -->
+<h2> TinyApp </h2>
+  <p> <a href="/urls/new">Create new tiny URL </a> | <a href="/urls">TinyURLS</a> </p></p>
+<% if (!username) { %>
+  <p> <a href="/register">Register</a> | <a href="/login">Login</a> </p>
+<% } else { %>
+  <Table > <tbody><tr><td>Logged in as: <%= username.email %>! &nbsp;</td><td><form method="GET" action="/logout">
+        <button type="submit" >Logout</button>
+  </form></td></tr><tbody></Table>
+  <p></p>
+<% } %>
+

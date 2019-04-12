@@ -24,7 +24,6 @@ const users = {
   }
 }
 
-
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -32,11 +31,11 @@ const urlDatabase = {
 var findEmail = function(email) { 
   for (let user in users) {
     if (email === user.email) {
-      return true;
-    } else {
-      return false;  
+      return user;
+    // } else {
+    //   return false;  
     }
-  }
+  } return false;
 }
 
 
@@ -119,6 +118,7 @@ app.post("/edit", (req, res) => {
   res.redirect('');
 });
 
+// created a GET /register endpoint
 app.get("/register", (req, res) => {
   // let templateVars =  {username: req.cookie.user_id};
   // res.render("register", templateVars);
@@ -130,6 +130,7 @@ app.post("/logout", (req, res) => {
   res.redirect('/urls');
 });
 
+//Create a registration handler: POST /register endpoint
 app.post("/register", (req, res) => {
   if (!findEmail(req.body.email)){
     console.log(findEmail(req.body.email));
@@ -141,6 +142,12 @@ app.post("/register", (req, res) => {
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
-    res.status(400).send('email is taken');;
+    res.status(400).send('email is taken');; //Handle Registration Errors
   }
+});
+//Create a Login Page: Get /login endpoint
+app.get("/login", (req, res) => {
+  //let templateVars =  {username: req.cookies.user_id};
+  // res.render("register", templateVars);
+  res.render("login");
 });
