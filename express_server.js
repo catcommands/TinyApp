@@ -15,7 +15,7 @@ const users = {
   "userRandomID": {
     id: "userRandomID", 
     email: "jeff@canada.com", 
-    password: "purple-monkey-dinosaur"
+    password: "abc"
   },
  "user2RandomID": {
     id: "user2RandomID", 
@@ -112,14 +112,22 @@ function generateRandomString() {
   return url;
 }
 
+//LOGIN 
 app.post("/login", (req, res) => {
-  console.log(req.body);
-  var foundUser = findEmail(req.body.username)
+  console.log('testsstestststsets');
+  var foundUser = findEmail(req.body.email)
   if (foundUser) {
     console.log(foundUser)
-    res.cookie('user_id', foundUser.id);
+    if (foundUser.password === req.body.password) {
+      res.cookie('user_id', foundUser.id);
+      res.redirect('/urls');
+    } else {
+      res.send("<html><body> Password doesn't match </body></html>\n");
+    }
   }
-  res.redirect('/urls');
+  else {
+    res.send("<html><h1> User doens't exist </h1></html>\n");
+  }
 });
 
 app.post("/edit", (req, res) => {
@@ -150,7 +158,7 @@ app.post("/register", (req, res) => {
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
-    res.status(400).send('email is taken');; //Handle Registration Errors
+    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><h2>");; //Handle Registration Errors
   }
 });
 //Create a Login Page: Get /login endpoint
