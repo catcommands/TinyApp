@@ -11,10 +11,35 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+var findEmail = function(email) { 
+  for (let user in users) {
+    if (email === user.email) {
+      return true;
+    } else {
+      return false;  
+    }
+  }
+}
+
+
 
 app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
@@ -45,7 +70,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], "username":req.cookies.username };
   res.render("urls_show", templateVars);
 });
 
@@ -88,12 +113,34 @@ app.post("/login", (req, res) => {
   res.redirect('/urls');
 });
 
-app.get("/registration", (req, res) => {
-  let templateVars =  {username: req.cookie.user_id};
-  res.render("urls_registration", templateVars);
+app.post("/edit", (req, res) => {
+  console.log(req.body);
+  res.cookie('username', req.body.username);
+  res.redirect('');
+});
+
+app.get("/register", (req, res) => {
+  // let templateVars =  {username: req.cookie.user_id};
+  // res.render("register", templateVars);
+  res.render("register");
 });
 
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect('/urls');
+});
+
+app.post("/register", (req, res) => {
+  if (!findEmail(req.body.email)){
+    console.log(findEmail(req.body.email));
+    let register = generateRandomString();
+    res.cookie("user_id", register);
+    users[register] = {id : register, 
+      email: req.body.email, 
+      password: req.body.password};
+      console.log("users: ",users);
+    res.redirect("/urls");
+  } else {
+    res.status(400).send('email is taken');;
+  }
 });
