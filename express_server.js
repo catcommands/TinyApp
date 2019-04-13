@@ -12,8 +12,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const users = { 
-  "userRandomID": {
-    id: "userRandomID", 
+  "aJ48lW": {
+    id: "aJ48lW", 
     email: "jeff@canada.com", 
     password: "abc"
   },
@@ -57,7 +57,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, "user":findUser(req.cookies.user_id)};
+  let templateVars = { urls: urlDatabase, user: findUser(req.cookies.user_id)};
   res.render("urls_index", templateVars);
 });
 
@@ -72,9 +72,9 @@ app.get("/urls/new", (req, res) => {
     //console.log(!req.cookies.user_id)
     res.redirect("/login?alert=true");
   } else {
-    const user_id = users[req.cookies.user_id].email;
+    const user_id = users[req.cookies.user_id].id;
     console.log("new:", user_id);
-    let templateVars = { urls: urlDatabase, "user":req.cookies.user_id};
+    let templateVars = { urls: urlDatabase, user: req.cookies.user_id};
     res.render("urls_new", templateVars);
   }
   
@@ -101,7 +101,7 @@ app.post("/urls", (req, res) => {
   console.log(req.body);
     var shortURL = generateRandomString();
     var longURL = req.body.longURL;
-    urlDatabase[shortURL]=longURL;
+    urlDatabase[shortURL] = {longURL: longURL, userID: req.cookies.user_id };
     res.redirect('/urls');
 });
 
