@@ -66,10 +66,15 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
+// URLs for users only
 app.get("/urls/new", (req, res) => {
+  if (!req.session.username) {
+    res.redirect("/login?alert=true");
+  }
+  const user_id = users[req.session.user_id].email;
+  console.log("new:", user_id);
   let templateVars = { urls: urlDatabase, "user":req.cookies.user_id};
-
-  res.render("urls_new", templateVars);
+  res.redirect("login", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
