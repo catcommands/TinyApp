@@ -98,7 +98,11 @@ app.post('/urls/:shortURL/delete', function (req, res) {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  if (!urlDatabase.hasOwnProperty(req.params.shrtURL)) {
+    return res.status(400);
+    res.send("Page doesn't exist");
+  }
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
