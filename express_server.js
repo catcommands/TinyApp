@@ -24,10 +24,12 @@ const users = {
   }
 }
 
+//Database objects here
+
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+}; //urlDatabase, as we have more data, what about keep it {could be anything}.
 var findEmail = function(email) { 
   for (let user in users) {
     if (email === users[user].email) {
@@ -48,10 +50,6 @@ var findUser = function(user_id) {
 
 app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
-app.listen(PORT, () => {
-  console.log(`I am listening now! Go Ahead! ${PORT}!`);
 });
 
 app.get("/urls.json", (req, res) => {
@@ -75,7 +73,9 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], "user":req.cookies.user_id };
+  let templateVars = { shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL], 
+    "user":req.cookies.user_id };
   res.render("urls_show", templateVars);
 });
 
@@ -114,7 +114,7 @@ function generateRandomString() {
 
 //LOGIN 
 app.post("/login", (req, res) => {
-  console.log('testsstestststsets');
+  console.log('test');
   var foundUser = findEmail(req.body.email)
   if (foundUser) {
     console.log(foundUser)
@@ -158,10 +158,14 @@ app.post("/register", (req, res) => {
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
-    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><h2>");; //Handle Registration Errors
+    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");; //Handle Registration Errors
   }
 });
 //Create a Login Page: Get /login endpoint
 app.get("/login", (req, res) => {
   res.render("login");
+});
+
+app.listen(PORT, () => {//adding this in the bottom to make things in order
+  console.log(`Jaffar is now listening and watching you, so speak and shout out your desires!!!!! ${PORT}!`);
 });
