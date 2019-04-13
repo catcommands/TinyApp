@@ -24,7 +24,7 @@ const users = {
   }
 }
 
-//Database objects here
+//--------------------------------------------Database objects here
 
 const urlDatabase = {
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
@@ -66,15 +66,18 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
-// URLs for users only
+// ------------------------------------------URLs for users only
 app.get("/urls/new", (req, res) => {
-  if (!req.session.username) {
+  if (!req.cookies.user_id) {
+    //console.log(!req.cookies.user_id)
     res.redirect("/login?alert=true");
+  } else {
+    const user_id = users[req.cookies.user_id].email;
+    console.log("new:", user_id);
+    let templateVars = { urls: urlDatabase, "user":req.cookies.user_id};
+    res.render("urls_new", templateVars);
   }
-  const user_id = users[req.session.user_id].email;
-  console.log("new:", user_id);
-  let templateVars = { urls: urlDatabase, "user":req.cookies.user_id};
-  res.redirect("login", templateVars);
+  
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -117,7 +120,7 @@ function generateRandomString() {
   return url;
 }
 
-//LOGIN 
+//----------------------------------------------LOGIN 
 app.post("/login", (req, res) => {
   console.log('test');
   var foundUser = findEmail(req.body.email)
@@ -141,7 +144,7 @@ app.post("/edit", (req, res) => {
   res.redirect('');
 });
 
-// create a GET /register endpoint
+// ------------------------------------create a GET /register endpoint
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -151,7 +154,7 @@ app.post("/logout", (req, res) => {
   res.redirect('/urls');
 });
 
-//Create a registration handler: POST /register endpoint
+//-------------------------Create a registration handler: POST /register endpoint
 app.post("/register", (req, res) => {
   if (!findEmail(req.body.email)){
     console.log(findEmail(req.body.email));
@@ -166,11 +169,12 @@ app.post("/register", (req, res) => {
     res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");; //Handle Registration Errors
   }
 });
-//Create a Login Page: Get /login endpoint
+
+//-----------------------------------Create a Login Page: Get /login endpoint
 app.get("/login", (req, res) => {
   res.render("login");
 });
-
-app.listen(PORT, () => {//adding this in the bottom to make things in order
+//----------------------------adding this in the bottom to make things in order
+app.listen(PORT, () => {
   console.log(`Jaffar is now listening and watching you, so speak and shout out your desires!!!!! ${PORT}!`);
 });
