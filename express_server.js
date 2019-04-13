@@ -84,12 +84,17 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, 
     longURL: urlDatabase[req.params.shortURL], 
     "user":req.cookies.user_id };
+    
   res.render("urls_show", templateVars);
 });
-
+//-------------------------------------------------- Delete URLs, authorized users only
 app.post('/urls/:shortURL/delete', function (req, res) {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect('/urls');
+  if (req.cookies.user_id && req.cookies.user_id === urlDatabase[req.params.shortURL].userID) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect('/urls');
+  } else {
+    res.redirect("/login?alert=true");
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
