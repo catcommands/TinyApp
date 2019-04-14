@@ -9,15 +9,24 @@ var app = express()
 
 app.use(cookieSession({
   name: 'session',
-  keys: [""],
+  keys: ["Done"],
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(function(req, res, next) {
+  console.log('Cookies: ', req.session);
+  console.log('Signed: ', req.signedCookies);
+  next();
+});
+
 app.set("view engine", "ejs");
 
+
+
+//-----------------------------------------Database
 const users = { 
   "aJ48lW": {
     id: "aJ48lW", 
@@ -88,11 +97,15 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  if(req.session.user_id) {
   let templateVars = { shortURL: req.params.shortURL, 
     longURL: urlDatabase[req.params.shortURL], 
-    "user":req.session.user_id };
-    
-  res.render("urls_show", templateVars);
+    user_id: req.session.user_id
+  };
+    res.render("urls_show", templateVars);
+} else {
+  res.redirect("/login")
+}
 });
 //-------------------------------------------------- Delete URLs, authorized users only
 app.post('/urls/:shortURL/delete', function (req, res) {
@@ -127,6 +140,8 @@ app.post('/urls/:id', function (req, res) {
   console.log(urlDatabase);
 });
 
+
+//------------------------------------------------------Generate random string.
 function generateRandomString() {
   var url = "";
   const length = 6;
@@ -138,12 +153,12 @@ function generateRandomString() {
 
 //----------------------------------------------Login 
 app.post("/login", (req, res) => {
-  console.log('test');
+  //console.log('test');
   var foundUser = findEmail(req.body.email)
   if (foundUser) {
     console.log(foundUser)
     if (bcrypt.compareSync(req.body.password, foundUser.password)) {
-      req.session('user_id', foundUser.id);
+      req.session.user_id = foundUser.id;
       res.redirect('/urls');
     } else {
       res.send("<html><body> Password doesn't match </body></html>\n");
