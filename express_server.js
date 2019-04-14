@@ -96,7 +96,7 @@ app.post('/urls/:shortURL/delete', function (req, res) {
     res.redirect("/login?alert=true");
   }
 });
-
+//------------------------------------------------------Anyone can visit short URLs
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase.hasOwnProperty(req.params.shrtURL)) {
     return res.status(400);
