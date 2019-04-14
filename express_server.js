@@ -1,24 +1,24 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 var express = require("express");
 var app = express();
 var PORT = 8080;
-var cookieSession = require('cookie-session')
+var cookieSession = require("cookie-session");
 
-var app = express()
+var app = express();
 // app.use(cookieParser())
 
 app.use(cookieSession({
-  name: 'session',
+  name: "session",
   keys: ["Done"],
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
+}));
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(function(req, res, next) {
-  console.log('Cookies: ', req.session);
-  console.log('Signed: ', req.signedCookies);
+  console.log("Cookies: ", req.session);
+  console.log("Signed: ", req.signedCookies);
   next();
 });
 
@@ -29,24 +29,24 @@ app.set("view engine", "ejs");
 //-----------------------------------------Database
 const users = { 
   "aJ48lW": {
-    id: "aJ48lW", 
-    email: "jeff@canada.com", 
+    id:"aJ48lW", 
+    email:"jeff@canada.com", 
     password: "abc"
   },
  "user2RandomID": {
-    id: "user2RandomID", 
+    id:"user2RandomID", 
     email: "user2@example.com", 
     password: "dishwasher-funk"
   }
-}
+};
 
-//--------------------------------------------Database objects here
+//-------------------------------------- -Database objects here
 
 const urlDatabase = {
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 }; //urlDatabase, as we have more data, what about keep it {could be anything}.
-var findEmail = function(email) { 
+var findEmail = function(email){ 
   for (let user in users) {
     if (email === users[user].email) {
       return users[user]
@@ -107,7 +107,7 @@ app.get("/urls/:shortURL", (req, res) => {
   res.redirect("/login")
 }
 });
-//-------------------------------------------------- Delete URLs, authorized users only
+//------------------------------------------ Delete URLs, authorized users only
 app.post('/urls/:shortURL/delete', function (req, res) {
   if (req.session.user_id && req.session.user_id === urlDatabase[req.params.shortURL].userID) {
     delete urlDatabase[req.params.shortURL];
@@ -116,7 +116,7 @@ app.post('/urls/:shortURL/delete', function (req, res) {
     res.redirect("/login?alert=true");
   }
 });
-//------------------------------------------------------Anyone can visit short URLs
+//----------------------------------------------Anyone can visit short URLs
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase.hasOwnProperty(req.params.shrtURL)) {
     return res.status(400);
@@ -141,7 +141,7 @@ app.post('/urls/:id', function (req, res) {
 });
 
 
-//------------------------------------------------------Generate random string.
+//----------------------------------------------------Generate random string.
 function generateRandomString() {
   var url = "";
   const length = 6;
