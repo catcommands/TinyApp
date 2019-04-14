@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 var express = require("express");
 var app = express();
 var PORT = 8080;
@@ -129,13 +130,13 @@ function generateRandomString() {
   return url;
 }
 
-//----------------------------------------------LOGIN 
+//----------------------------------------------Login 
 app.post("/login", (req, res) => {
   console.log('test');
   var foundUser = findEmail(req.body.email)
   if (foundUser) {
     console.log(foundUser)
-    if (foundUser.password === req.body.password) {
+    if (bcrypt.compareSync(req.body.password, foundUser.password)) {
       res.cookie('user_id', foundUser.id);
       res.redirect('/urls');
     } else {
@@ -169,9 +170,11 @@ app.post("/register", (req, res) => {
     console.log(findEmail(req.body.email));
     let register = generateRandomString();
     res.cookie("user_id", register);
+    let hash = bcrypt.hashSync(req.body.password, 10)
     users[register] = {id : register, 
       email: req.body.email, 
-      password: req.body.password};
+      password: hash
+    };
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
@@ -187,3 +190,9 @@ app.get("/login", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Jaffar is now listening and watching you, so speak and shout out your desires!!!!! ${PORT}!`);
 });
+
+//----------------------------------create function to use bcrypt When Storing Passwords
+function hasher(password) {
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  return hashedPassword;
+}
