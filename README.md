@@ -1,6 +1,6 @@
 # TinyApp Project
 
-## please visit [My GitHub Profile](https://github.com/JeffShah)
+## Please visit [My GitHub Profile](https://github.com/JeffShah)
 
 - Welcome to My First project of the lighthouse Coding Bootcamp;
 - TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly);
