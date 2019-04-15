@@ -16,11 +16,11 @@ app.use(cookieSession({
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(function(req, res, next) {
-  console.log("Cookies: ", req.session);
-  console.log("Signed: ", req.signedCookies);
-  next();
-});
+// app.use(function(req, res, next) {
+//   console.log("Cookies: ", req.session);
+//   console.log("Signed: ", req.signedCookies);
+//   next();
+// });
 
 app.set("view engine", "ejs");
 
@@ -49,20 +49,20 @@ const urlDatabase = {
 var findEmail = function(email){ 
   for (let user in users) {
     if (email === users[user].email) {
-      return users[user]
+      return users[user];
     // } else {
     //   return false;  
     }
   } return false;
-}
+};
 
 var findUser = function(user_id) { 
-  for (let user in users) {
+  for (let user in users){
     if (user_id === user) {
       return users[user];  
     }
   } return false;
-}
+};
 
 app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
@@ -154,9 +154,9 @@ function generateRandomString() {
 //----------------------------------------------Login 
 app.post("/login", (req, res) => {
   //console.log('test');
-  var foundUser = findEmail(req.body.email)
+  var foundUser = findEmail(req.body.email);
   if (foundUser) {
-    console.log(foundUser)
+    console.log(foundUser);
     if (bcrypt.compareSync(req.body.password, foundUser.password)) {
       req.session.user_id = foundUser.id;
       res.redirect('/urls');
@@ -200,7 +200,7 @@ app.post("/register", (req, res) => {
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
-    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");; //Handle Registration Errors
+    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>"); //Handle Registration Errors
   }
 });
 
@@ -210,7 +210,7 @@ app.get("/login", (req, res) => {
 });
 //----------------------------adding this in the bottom to make things in order
 app.listen(PORT, () => {
-  console.log(`Jaffar is now listening and watching you, so speak and shout out your desires!!!!! ${PORT}!`);
+  console.log(`App is listening...!!! ${PORT}!`);
 });
 
 //----------------------------------create function to use bcrypt When Storing Passwords

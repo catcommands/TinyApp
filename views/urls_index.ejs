@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>TinyApp</title>
-  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>TinyApp</title>
+
 </head>
+
 <body style="font-size:20px; padding:50px;">
-  <% include partials/_header.ejs %>
-  <!-- delete and POST method in form -->
-  <% if (user) { %>
-    <h1>My URLs</h1>
-    <li><a href="/urls/new">Create New TinyURL</a></li>
-    <ul>
-      <% for (var shortURL in urls) { %>
-      <li> <%= shortURL %> : <a href="<%= urls[shortURL] %>"><%= urls[shortURL]["longURL"] %></a><a href="/urls/<%=shortURL%>">Edit</a>
-        <form method="POST" action="/urls/<%= shortURL %>/delete">
-          <input type="submit" value="Delete"/>
-        </form>
-      </li>
-      <% }; %>
-    </ul>
-  <% } else { %>
-    you need to login
-  <% }; %>
+    <% include partials/_header.ejs %>
+        <!-- delete and POST method in form -->
+        <% if (user) { %>
+            <h1>My URLs</h1>
+            <li><a href="/urls/new">Create New TinyURL</a></li>
+            <ul>
+                <% for (var shortURL in urls) { %>
+                    <li>
+                        <%= shortURL %> :
+                            <a href="<%= urls[shortURL] %>">
+                                <%= urls[shortURL]["longURL"] %>
+                            </a><a href="/urls/<%=shortURL%>">Edit</a>
+                            <form method="POST" action="/urls/<%= shortURL %>/delete">
+                                <input type="submit" value="Delete" />
+                            </form>
+                    </li>
+                    <% }; %>
+            </ul>
+            <% } else { %>
+                Please login!
+                <% }; %>
 </body>
+
 </html>
