@@ -5,28 +5,23 @@ var PORT = 8080;
 var cookieSession = require("cookie-session");
 
 var app = express();
-// app.use(cookieParser())
 
 app.use(cookieSession({
   name: "session",
   keys: ["Done"],
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 24 * 60 * 60 * 1000
 }));
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-// app.use(function(req, res, next) {
-//   console.log("Cookies: ", req.session);
-//   console.log("Signed: ", req.signedCookies);
-//   next();
-// });
 
 app.set("view engine", "ejs");
 
 
 
-//-----------------------------------------Database
+// ********************* DATABASE *********************
+
 const users = { 
   "aJ48lW": {
     id:"aJ48lW", 
@@ -40,18 +35,16 @@ const users = {
   }
 };
 
-//-------------------------------------- -Database objects here
+// ****************** DATABASE OBJECTS ******************
 
 const urlDatabase = {
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
-}; //urlDatabase, as we have more data, what about keep it {could be anything}.
+};
 var findEmail = function(email){ 
   for (let user in users) {
     if (email === users[user].email) {
       return users[user];
-    // } else {
-    //   return false;  
     }
   } return false;
 };
@@ -71,7 +64,8 @@ app.get("/hello", (req, res) => {
 app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
-//--------created a for loop to fix the bug on main page when logged in
+// ******************* DEFINING USER ID *******************
+
 app.get("/urls", (req, res) => {
   var myUrls = {}
   for (var key in urlDatabase) {
@@ -88,19 +82,14 @@ app.get("/", (req, res) => {
   res.redirect("/urls");
 });
 
-// app.get("/hello", (req, res) => {
-//   let templateVars = { greeting: 'Hello World!' };
-//   res.render("hello_world", templateVars);
-// });
 
-// ------------------------------------------URLs for users only
+// ******************* URLs FOR USERS ONLY *****************
+
 app.get("/urls/new", (req, res) => {
   if (!req.session.user_id) {
-    //console.log(!req.cookies.user_id)
     res.redirect("/login?alert=true");
   } else {
     const user_id = users[req.session.user_id].id;
-    console.log("new:", user_id);
     let templateVars = { urls: urlDatabase, user: req.session.user_id};
     res.render("urls_new", templateVars);
   }
@@ -119,7 +108,9 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
-//------------------------------------------ Delete URLs, authorized users only
+// ************ DELETE URLs BY AUTHORIZED USERS ONLY ************
+
+
 app.post('/urls/:shortURL/delete', function (req, res) {
   if (req.session.user_id && req.session.user_id === urlDatabase[req.params.shortURL].userID) {
     delete urlDatabase[req.params.shortURL];
@@ -128,7 +119,9 @@ app.post('/urls/:shortURL/delete', function (req, res) {
     res.redirect("/login?alert=true");
   }
 });
-//----------------------------------------------Anyone can visit short URLs
+
+// ******************* ANYONE CAN VISIT SHORT URLs *******************
+
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase.hasOwnProperty(req.params.shortURL)) {
     return res.status(400);
@@ -152,7 +145,8 @@ app.post('/urls/:id', function (req, res) {
 });
 
 
-//----------------------------------------------------Generate random string.
+// ********************* GENERATE RANDOM STRING *********************
+
 function generateRandomString() {
   var url = "";
   const length = 6;
@@ -162,9 +156,9 @@ function generateRandomString() {
   return url;
 }
 
-//----------------------------------------------Login 
+// ******************* LOGIN POST REQUEST METHOD *******************
+
 app.post("/login", (req, res) => {
-  //console.log('test');
   var foundUser = findEmail(req.body.email);
   if (foundUser) {
     console.log(foundUser);
@@ -185,7 +179,8 @@ app.post("/edit", (req, res) => {
   res.redirect('');
 });
 
-// ------------------------------------create a GET /register endpoint
+// ********************* GET REGISTER ENDPOINT *********************
+
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -196,9 +191,9 @@ app.post("/logout", (req, res) => {
   res.redirect('/urls');
 });
 
-//-------------------------Create a registration handler: POST /register endpoint
+// ********************* POST REGISTER ENDPOINT *********************
+
 app.post("/register", (req, res) => {
-  //check to see if the email exist, if it does we redirect them and say the email already exist, otherwise we are creating a username
   if (!findEmail(req.body.email)){
     console.log(findEmail(req.body.email));
     let register = generateRandomString();
@@ -211,20 +206,22 @@ app.post("/register", (req, res) => {
       console.log("users: ",users);
     res.redirect("/urls");
   } else {
-    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>"); //Handle Registration Errors
+    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");
   }
 });
 
-//-----------------------------------Create a Login Page: Get /login endpoint
+// ********************* GET LOGIN REQUEST *********************
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
-//----------------------------adding this in the bottom to make things in order
+
+// ********************* PORT 8080 SERVER LISTENING *********************
 app.listen(PORT, () => {
   console.log(`Welcome to Jaffar's Project: TinyApp is istening...!!! ${PORT}!`);
 });
 
-//----------------------------------create function to use bcrypt When Storing Passwords
+// ********************* BCRYPT FUNCTION FOR PASSWORDS *********************
 function hasher(password) {
   const hashedPassword = bcrypt.hashSync(password, 10);
   return hashedPassword;

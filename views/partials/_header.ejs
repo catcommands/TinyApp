@@ -6,27 +6,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>TinyApp</title>
 </head>
-
 <body>
     <h2> TinyApp </h2>
     <p> <a href="/urls/new">Create new tiny URL </a> | <a href="/urls">TinyURLS</a> </p>
-    </p>
     <% if (!user) { %>
-        <p> <a href="/register">Register</a> | <a href="/login">Login</a> </p>
-        <% } else { %>
-            <Table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <h4>Welcome back</h4>: <%= user.email %>! &nbsp;</td>
-                        <td>
-                            <form method="POST" action="/logout">
-                                <button type="submit">Logout</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <tbody>
-            </Table>
-            <p></p>
-            <% } %>
+    <p> <a href="/register">Register</a> | <a href="/login">Login</a> </p>
+    <% } else { %>
+    <Table>
+        <tbody>
+        <tr>
+        <td>
+        <h4>Welcome back</h4>: <%= user.email %>! &nbsp;</td>
+        <td>
+        <form method="POST" action="/logout">
+        <button type="submit">Logout</button>
+        </form>
+    </td>
+    </tr>
+    <tbody>
+    </Table>
+<p></p>
+<% } %>
 </body>
