@@ -1,12 +1,16 @@
-# TinyApp Project
+# TinyApp Project by Jaffar Shah
+
 
 ## Please visit [My GitHub Profile](https://github.com/JeffShah)
+## [Click here](https://github.com/JeffShah/AprilBootcamp) to learn more about My Projects and April Coding BootCamp at LHL!
 
 - Welcome to My First project of the lighthouse Coding Bootcamp;
 - TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly);
 
 ## Final Product
-
+- Scroll down to see screenshots of the final product,
+- Final product also allows the user to store, shorten and update URLs and also delete them,
+- URLs page are only accessible to the user who creates them.
 
 ## Dependencies
 
