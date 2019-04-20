@@ -71,16 +71,27 @@ app.get("/hello", (req, res) => {
 app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
-
+//--------created a for loop to fix the bug on main page when logged in
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: findUser(req.session.user_id)};
+  var myUrls = {}
+  for (var key in urlDatabase) {
+    var userID = urlDatabase[key].userID
+    if (req.session.user_id === userID) {
+      myUrls[key] = urlDatabase[key]
+    }
+  }
+  let templateVars = { urls: myUrls, user: findUser(req.session.user_id)};
   res.render("urls_index", templateVars);
 });
 
-app.get("/hello", (req, res) => {
-  let templateVars = { greeting: 'Hello World!' };
-  res.render("hello_world", templateVars);
+app.get("/", (req, res) => {
+  res.redirect("/urls");
 });
+
+// app.get("/hello", (req, res) => {
+//   let templateVars = { greeting: 'Hello World!' };
+//   res.render("hello_world", templateVars);
+// });
 
 // ------------------------------------------URLs for users only
 app.get("/urls/new", (req, res) => {
@@ -93,20 +104,21 @@ app.get("/urls/new", (req, res) => {
     let templateVars = { urls: urlDatabase, user: req.session.user_id};
     res.render("urls_new", templateVars);
   }
-  
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  if(req.session.user_id) {
+  if(req.session.user_id && req.session.user_id === urlDatabase[req.params.shortURL].userID) {
   let templateVars = { shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL], 
-    user_id: req.session.user_id
+    longURL: urlDatabase[req.params.shortURL],
+    user_id: req.session.user_id,
+    user: findUser(req.session.user_id)
   };
     res.render("urls_show", templateVars);
-} else {
-  res.redirect("/login")
-}
+  } else {
+    res.redirect("/login")
+  }
 });
+
 //------------------------------------------ Delete URLs, authorized users only
 app.post('/urls/:shortURL/delete', function (req, res) {
   if (req.session.user_id && req.session.user_id === urlDatabase[req.params.shortURL].userID) {
@@ -118,7 +130,7 @@ app.post('/urls/:shortURL/delete', function (req, res) {
 });
 //----------------------------------------------Anyone can visit short URLs
 app.get("/u/:shortURL", (req, res) => {
-  if (!urlDatabase.hasOwnProperty(req.params.shrtURL)) {
+  if (!urlDatabase.hasOwnProperty(req.params.shortURL)) {
     return res.status(400);
     res.send("Page doesn't exist");
   }
@@ -135,9 +147,8 @@ app.post("/urls", (req, res) => {
 });
 
 app.post('/urls/:id', function (req, res) {
-  urlDatabase[req.params.id] = req.body.longURL;
+  urlDatabase[req.params.id].longURL = req.body.longURL;
   res.redirect('/urls');
-  console.log(urlDatabase);
 });
 
 
@@ -171,7 +182,6 @@ app.post("/login", (req, res) => {
 
 app.post("/edit", (req, res) => {
   console.log(req.body);
-  req.session('user_id', req.body.user_id);
   res.redirect('');
 });
 
@@ -188,6 +198,7 @@ app.post("/logout", (req, res) => {
 
 //-------------------------Create a registration handler: POST /register endpoint
 app.post("/register", (req, res) => {
+  //check to see if the email exist, if it does we redirect them and say the email already exist, otherwise we are creating a username
   if (!findEmail(req.body.email)){
     console.log(findEmail(req.body.email));
     let register = generateRandomString();
@@ -210,7 +221,7 @@ app.get("/login", (req, res) => {
 });
 //----------------------------adding this in the bottom to make things in order
 app.listen(PORT, () => {
-  console.log(`App is listening...!!! ${PORT}!`);
+  console.log(`Welcome to Jaffar's Project: TinyApp is istening...!!! ${PORT}!`);
 });
 
 //----------------------------------create function to use bcrypt When Storing Passwords
