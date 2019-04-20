@@ -21,7 +21,7 @@
                 <% for (var shortURL in urls) { %>
                     <li>
                         <%= shortURL %> :
-                            <a href="<%= urls[shortURL] %>">
+                            <a href="/u/<%= shortURL %>">
                                 <%= urls[shortURL]["longURL"] %>
                             </a><a href="/urls/<%=shortURL%>">Edit</a>
                             <form method="POST" action="/urls/<%= shortURL %>/delete">
