@@ -90,7 +90,7 @@ app.get("/urls/new", (req, res) => {
     res.redirect("/login?alert=true");
   } else {
     const user_id = users[req.session.user_id].id;
-    let templateVars = { urls: urlDatabase, user: req.session.user_id};
+    let templateVars = { urls: urlDatabase, user: findUser(req.session.user_id)};
     res.render("urls_new", templateVars);
   }
 });
