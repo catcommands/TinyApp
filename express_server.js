@@ -67,11 +67,11 @@ app.get("/urls.json", (req, res) => {
 // ******************* DEFINING USER ID *******************
 
 app.get("/urls", (req, res) => {
-  var myUrls = {}
+  var myUrls = {};
   for (var key in urlDatabase) {
     var userID = urlDatabase[key].userID
     if (req.session.user_id === userID) {
-      myUrls[key] = urlDatabase[key]
+      myUrls[key] = urlDatabase[key];
     }
   }
   let templateVars = { urls: myUrls, user: findUser(req.session.user_id)};
@@ -104,7 +104,7 @@ app.get("/urls/:shortURL", (req, res) => {
   };
     res.render("urls_show", templateVars);
   } else {
-    res.redirect("/login")
+    res.redirect("/login");
   }
 });
 
@@ -132,7 +132,6 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);
     var shortURL = generateRandomString();
     var longURL = req.body.longURL;
     urlDatabase[shortURL] = {longURL: longURL, userID: req.session.user_id };
@@ -161,7 +160,6 @@ function generateRandomString() {
 app.post("/login", (req, res) => {
   var foundUser = findEmail(req.body.email);
   if (foundUser) {
-    console.log(foundUser);
     if (bcrypt.compareSync(req.body.password, foundUser.password)) {
       req.session.user_id = foundUser.id;
       res.redirect('/urls');
@@ -175,7 +173,6 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/edit", (req, res) => {
-  console.log(req.body);
   res.redirect('');
 });
 
@@ -187,7 +184,6 @@ app.get("/register", (req, res) => {
 
 app.post("/logout", (req, res) => {
   req.session = null;
-  //res.clearCookie('user_id');
   res.redirect('/urls');
 });
 
@@ -195,7 +191,6 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   if (!findEmail(req.body.email)){
-    console.log(findEmail(req.body.email));
     let register = generateRandomString();
     req.session.user_id = register;
     let hash = bcrypt.hashSync(req.body.password, 10)
@@ -203,7 +198,6 @@ app.post("/register", (req, res) => {
       email: req.body.email, 
       password: hash
     };
-      console.log("users: ",users);
     res.redirect("/urls");
   } else {
     res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");
