@@ -1,9 +1,10 @@
 // (1) - Require
 const bcrypt = require("bcrypt");
-let express = require("express");
-let app = express();
-let PORT = 8080;
-let cookieSession = require("cookie-session");
+const express = require("express");
+const app = express();
+const PORT = 8080;
+const cookieSession = require("cookie-session");
+const bodyParser = require("body-parser");
 
 // (2) - app.use
 app.use(cookieSession({
@@ -12,7 +13,7 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000
 }));
 
-const bodyParser = require("body-parser");
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 // (3) - app.set
@@ -202,7 +203,18 @@ app.post("/edit", (req, res) => {
 
 // ******************* POST REGISTER ENDPOINT *******************
 
-app.post("/register", (req, res) => {
+// app.post("/register", (req, res) => {
+//   if (!req.session.user_id) {
+//     res.render('urls_register');
+//   } else {
+//     res.redirect('/urls');
+//   }
+// });
+  // if email or password is not there, then return error
+  // if we can find user, return error
+  // create user and login
+
+app.post('/register', (req, res) => {  
   if (!findEmail(req.body.email)){
     let register = generateRandomString();
     req.session.user_id = register;
@@ -210,7 +222,7 @@ app.post("/register", (req, res) => {
     users[register] = {id : register, email: req.body.email, password: hash};
     res.redirect("/urls");
   } else {
-    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");
+    res.status(400).send("This email already exists. Try a new one!");
   }
 });
 
