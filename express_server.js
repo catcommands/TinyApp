@@ -203,14 +203,18 @@ app.post("/edit", (req, res) => {
 // ******************* POST REGISTER ENDPOINT *******************
 
 app.post("/register", (req, res) => {
-  if (!findEmail(req.body.email)){
+  if (req.body.email === '') {
+    res.status(400).send("<html><h2>Empty input is not allowed<html></h2>");
+  }
+  if (!findEmail(req.body.email) && (req.body.email !== '')) {
+    //console.log("Soo");
     let register = generateRandomString();
     req.session.user_id = register;
     let hash = bcrypt.hashSync(req.body.password, 10)
     users[register] = {id : register, email: req.body.email, password: hash};
     res.redirect("/urls");
   } else {
-    res.status(400).send("<html><h2>This email already exists. Try a new one!<html><>");
+    res.status(400).send("<html><h2>This email already exists. Try a new one!<html></h2>");
   }
 });
 
