@@ -1,4 +1,4 @@
-# TinyApp Project by Jaffar Shah
+# TinyApp Project by Syed
 
 
 ## Please visit [My GitHub Profile](https://github.com/JeffShah)
