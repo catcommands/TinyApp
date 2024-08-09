@@ -1,8 +1,8 @@
-# TinyApp Project by Syed
+# TinyApp Project by CatCommands
 
 
-## Please visit [My GitHub Profile](https://github.com/JeffShah)
-## [Click here](https://github.com/JeffShah/AprilBootcamp) to learn more about My Projects and April Coding BootCamp at LHL!
+## Please visit [My GitHub Profile](https://github.com/catcommands)
+## [Click here](https://github.com/catcommands/AprilBootcamp) to learn more about My Projects and April Coding BootCamp at LHL!
 
 - Welcome to My First project of the lighthouse Coding Bootcamp;
 - TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly);
@@ -28,6 +28,6 @@
 
 ## Screenshots from my project, TinyApp:
 
-!["Screenshot of URLs page"](https://github.com/JeffShah/TinyApp/blob/master/docs/Screenshot%20urls.png)
-!["Screenshot of Register page"](https://github.com/JeffShah/TinyApp/blob/master/docs/Screenshot%20register.png)
-!["Screenshot of Logged in page"](https://github.com/JeffShah/TinyApp/blob/master/docs/Screenshot%20logged%20in.png)
+!["Screenshot of URLs page"](https://github.com/catcommands/TinyApp/blob/master/docs/Screenshot%20urls.png)
+!["Screenshot of Register page"](https://github.com/catcommands/TinyApp/blob/master/docs/Screenshot%20register.png)
+!["Screenshot of Logged in page"](https://github.com/catcommands/TinyApp/blob/master/docs/Screenshot%20logged%20in.png)
